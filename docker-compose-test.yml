@@ -1,0 +1,7 @@
+version: "3.6"
+
+services:
+  flood-app:
+    command: sh -c "npm test"
+  flood-service:
+    command: sh -c "npm test"

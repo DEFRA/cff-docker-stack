@@ -1,0 +1,15 @@
+version: "3.6"
+
+services:
+  # Because each app has the same dir structure then use the inspect links
+  # listed for each app from chrome://inspect to open a dev tools instance 
+  # for each app being debugged
+  # To make things easier, rename the windows in chrome
+  flood-app:
+    ports:
+      - "9229:9229"
+    command: sh -c "node --inspect-brk=0.0.0.0 index.js"
+  flood-service:
+    ports:
+      - "9228:9229"
+    command: sh -c "node --inspect-brk=0.0.0.0 index.js"
