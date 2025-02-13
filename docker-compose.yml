@@ -1,6 +1,19 @@
 version: "3.6"
 
 services:
+
+  flood-nginx:
+    image: nginx:latest
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ../flood-app/service-down:/usr/share/nginx/html
+    networks:
+      cff-internal:
+    ports:
+      - "8081:80"
+    depends_on:
+      - flood-app
+
   flood-app:
     build:
       context: ../flood-app
