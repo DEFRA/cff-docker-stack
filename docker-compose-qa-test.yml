@@ -1,0 +1,24 @@
+services:
+
+  flood-service-tests:
+    build:
+      context: ../flood-service-tests-v2
+    image: flood-service-tests
+    restart: on-failure
+    environment:
+      NODE_ENV: dev
+      ENV: local
+      HOST: 0.0.0.0
+      LFW_DATA_DB_CONNECTION: "postgres://u_flood:secret@flood-db:5432/flooddev"
+      FLOOD_APP_SITE_URL: "http://flood-app:3001"
+    env_file:
+      - ../flood-service-tests-v2/.env
+    networks:
+      cff-internal:
+    volumes:
+      - ../flood-service-tests-v2:/usr/src/app
+      - /usr/src/app/node_modules # Avoid overwriting node_modules
+    command: sh -c "npm test"
+
+networks:
+  cff-internal:

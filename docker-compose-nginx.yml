@@ -1,0 +1,19 @@
+services:
+
+  flood-proxy:
+    image: nginx:latest
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ../flood-app/service-down:/usr/share/nginx/html
+    networks:
+      cff-internal:
+    ports:
+      - "3009:80"
+    depends_on:
+      - flood-app
+
+  flood-app:
+    ports: !override []
+
+networks:
+  cff-internal:
