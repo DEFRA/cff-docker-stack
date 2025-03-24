@@ -14,6 +14,8 @@ services:
 
   flood-app:
     ports: !override []
+    environment:
+      FLOOD_APP_SITE_URL: "http://flood-proxy"
 
 networks:
   cff-internal:

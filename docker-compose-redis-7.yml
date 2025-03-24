@@ -1,0 +1,55 @@
+services:
+  flood-cache:
+    image: redis:7
+    command: >
+      redis-server 
+      --protected-mode no 
+      --bind 0.0.0.0 
+      --loglevel debug
+      --timeout 0
+      --tcp-keepalive 60
+      --client-output-buffer-limit normal 0 0 0
+      --maxclients 10000
+      --requirepass secret
+      --tls-port 6380
+      --port 0
+      --tls-cert-file /certs/redis.crt
+      --tls-key-file /certs/redis.key
+      --tls-ca-cert-file /certs/ca.crt
+      --tls-auth-clients no
+    ports:
+      - "6380:6380"  # TLS port for Redis
+    volumes:
+      - redis-data:/data
+      - ./stunnel/certs/stunnel.pem:/certs/redis.crt:ro
+      - ./stunnel/certs/stunnel.key:/certs/redis.key:ro
+      - ./stunnel/certs/stunnel.pem:/certs/ca.crt:ro  # Using the same cert as CA for simplicity
+    networks:
+      - cff-internal
+    # Temporarily disable healthcheck until we find a reliable solution
+    # healthcheck:
+    #   test: ["CMD", "sh", "-c", "echo PING | openssl s_client -connect 127.0.0.1:6380 -quiet | grep PONG || exit 1"]
+    #   interval: 5s
+    #   timeout: 3s
+    #   retries: 5
+
+  flood-app:
+    depends_on:
+      flood-cache:
+        condition: service_started
+    networks:
+      - cff-internal
+    environment:
+      NODE_TLS_REJECT_UNAUTHORIZED: "0"  # Only for development; remove in production
+      FLOOD_APP_LOCAL_CACHE: "false"
+      FLOOD_APP_REDIS_HOST: flood-cache
+      FLOOD_APP_REDIS_PORT: 6380
+      FLOOD_APP_REDIS_PASSWORD: "secret"
+      FLOOD_APP_REDIS_TLS: "true"
+      DEBUG: "ioredis:*"
+
+volumes:
+  redis-data:
+
+networks:
+  cff-internal:
