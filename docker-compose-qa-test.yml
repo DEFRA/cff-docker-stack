@@ -10,7 +10,7 @@ services:
       ENV: local
       HOST: 0.0.0.0
       LFW_DATA_DB_CONNECTION: "postgres://u_flood:secret@flood-db:5432/flooddev"
-      FLOOD_APP_SITE_URL: "http://flood-app:3001"
+      FLOOD_APP_SITE_URL: "http://flood-proxy"
     env_file:
       - ../flood-service-tests-v2/.env
     networks:
