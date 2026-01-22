@@ -11,6 +11,31 @@ This repository contains Docker Compose configurations for running the Check for
 - `flood-cache`: Redis cache server
 - `flood-proxy`: Nginx proxy server
 
+## Local Database Provisioning
+
+The stack uses the `flood-db` component which is built from the [flood-db repository](https://github.com/DEFRA/flood-db).
+
+For detailed instructions on creating a local copy of the flood database, refer to the [README in the `docker` subdirectory of the flood-db repository](https://github.com/DEFRA/flood-db/tree/master/database/flooddev/u_flood/setup/docker#readme). This documentation explains how to:
+
+- Set up a local PostgreSQL database with the correct schema
+- Import data from a cloud environment
+- Configure the database for local development
+
+### Volume Management
+
+The stack uses external volumes for local PostgreSQL data:
+
+- `flood-db-pgdata`: For PostgreSQL data files
+- `flood-db-wiyby`: For additional data
+
+Following the instructions for local database provisioning correctly will result in required volume creation.
+The required volumes can also be created by running the following commands manually **before** a local database is provisioned.
+
+```bash
+docker volume create flood-db-pgdata
+docker volume create flood-db-wiyby
+```
+
 ## Running the Stack
 
 ### Local Stack
@@ -83,30 +108,6 @@ docker compose run --build flood-service-tests npx wdio ./wdio.conf.js
 
 ```bash
 docker compose run --build flood-service-tests npx wdio ./wdio.conf.js --spec test/stations-test.js --mochaOpts.grep "Must display, the correct timestamp tooltip"
-```
-
-## Database Setup
-
-The stack uses the `flood-db` component which is built from the [flood-db repository](https://github.com/DEFRA/flood-db). 
-
-For detailed instructions on creating a local copy of the flood database, refer to the README in the `docker` subdirectory of the flood-db repository. This documentation explains how to:
-
-- Set up a local PostgreSQL database with the correct schema
-- Import data from production or pre-production environments
-- Configure the database for local development
-
-## Volume Management
-
-The stack uses external volumes for PostgreSQL data:
-
-- `flood-db-pgdata`: For PostgreSQL data files
-- `flood-db-wiyby`: For additional data
-
-Make sure these volumes exist before starting the stack:
-
-```bash
-docker volume create flood-db-pgdata
-docker volume create flood-db-wiyby
 ```
 
 ## Network
