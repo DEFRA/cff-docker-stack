@@ -112,3 +112,18 @@ docker volume create flood-db-wiyby
 ## Network
 
 All services are connected to the `cff-internal` network for internal communication.
+
+## Contributing to this project
+
+If you have an idea you'd like to contribute please log an issue.
+
+All contributions should be submitted via a pull request.
+
+## License
+
+THIS INFORMATION IS LICENSED UNDER THE CONDITIONS OF THE OPEN GOVERNMENT LICENCE found at:
+
+[http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3](http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3)
+
+The following attribution statement MUST be cited in your products and applications when using this information.
+> Contains public sector information licensed under the Open Government license v3
