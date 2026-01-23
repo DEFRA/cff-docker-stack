@@ -58,6 +58,12 @@ docker compose up --build flood-app flood-service
 
 ### Adding Redis Cache
 
+Run the following script from the project root directory to generate a self-signed certificate (valid for twelve months) supporting Redis Transport Layer Security:
+
+```bash
+tls/scripts/generate-redis-cert.sh
+```
+
 To include Redis caching with the stack:
 
 ```bash
