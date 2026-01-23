@@ -21,9 +21,9 @@ services:
       - "6380:6380"  # TLS port for Redis
     volumes:
       - redis-data:/data
-      - ./tls/certs/tls.pem:/certs/redis.crt:ro
-      - ./tls/certs/tls.key:/certs/redis.key:ro
-      - ./tls/certs/tls.pem:/certs/ca.crt:ro  # Using the same cert as CA for simplicity
+      - ./tls/certs/redis.pem:/certs/redis.crt:ro
+      - ./tls/certs/redis.key:/certs/redis.key:ro
+      - ./tls/certs/redis.pem:/certs/ca.crt:ro  # Using the same cert as CA for simplicity
     networks:
       - cff-internal
     # Temporarily disable healthcheck until we find a reliable solution
