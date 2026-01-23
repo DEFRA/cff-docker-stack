@@ -19,8 +19,8 @@ services:
     networks:
       cff-internal:
     volumes:
-      - ../flood-app:/usr/src/app
-      # - /usr/src/app/node_modules # Avoid overwriting node_modules
+      - ../flood-app:/home/node/app
+      # - /home/node/app/node_modules # Avoid overwriting node_modules
     ports:
       - "3009:3001"
     command: sh -c "npm run start:local"
@@ -28,6 +28,7 @@ services:
   flood-service:
     build:
       context: ../flood-service
+      target: development
     image: flood-service
     restart: on-failure
     environment:
@@ -41,8 +42,8 @@ services:
     networks:
       cff-internal:
     volumes:
-      - ../flood-service:/usr/src/app
-      - /usr/src/app/node_modules # Avoid overwriting node_modules
+      - ../flood-service:/home/node/app
+      - /home/node/app/node_modules # Avoid overwriting node_modules
     ports:
       - "3003:3003"
     command: sh -c "npm run start:local"

@@ -16,8 +16,8 @@ services:
     networks:
       cff-internal:
     volumes:
-      - ../flood-service-tests-v2:/usr/src/app
-      - /usr/src/app/node_modules # Avoid overwriting node_modules
+      - ../flood-service-tests-v2:/home/node/app
+      - /home/node/app/node_modules # Avoid overwriting node_modules
     command: sh -c "npm test"
 
 networks:
