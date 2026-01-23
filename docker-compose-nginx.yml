@@ -1,7 +1,7 @@
 services:
 
   flood-proxy:
-    image: nginx:1.29.4
+    image: nginx:1.29.4-alpine
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
       - ../flood-app/service-down:/usr/share/nginx/html
