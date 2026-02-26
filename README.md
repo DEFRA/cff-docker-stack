@@ -98,10 +98,24 @@ Then connect to the debug port (9229) using Chrome DevTools or your IDE.
 
 ## Running Tests
 
-### Running Application Tests
+### Running Unit Tests
+
+#### flood-app (using an existing container)
 
 ```bash
-docker compose exec flood-app npm test
+docker compose exec flood-app npm run test:no-coverage
+```
+
+#### flood-service (using an existing container)
+
+```bash
+docker compose exec flood-service npm run test:no-coverage
+```
+
+#### flood-app and flood-service
+
+```bash
+docker compose -f docker-compose.yml -f docker-compose-test.yml up --build flood-app flood-service
 ```
 
 ### Running Service Tests - may not work
