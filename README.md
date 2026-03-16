@@ -48,6 +48,12 @@ To run a minimal local stack:
 docker compose up --build flood-app flood-service flood-db
 ```
 
+To run a minimal local stack with pgadmin:
+
+```bash
+docker compose -f docker-compose.yml -f docker-compose-pgadmin4.yml up --build flood-app flood-service flood-db pgadmin
+```
+
 ### Using Remote Database
 
 Update FLOOD_SERVICE_CONNECTION_STRING in `docker-compose.yml` to point at the DB in one of the environments (e.g. dev)
