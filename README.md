@@ -48,10 +48,22 @@ To run a minimal local stack:
 docker compose up --build flood-app flood-service flood-db
 ```
 
+To tear down a minimal local stack:
+
+```bash
+docker compose down --remove-orphans flood-app flood-service flood-db
+```
+
 To run a minimal local stack with pgadmin:
 
 ```bash
 docker compose -f docker-compose.yml -f docker-compose-pgadmin4.yml up --build flood-app flood-service flood-db pgadmin
+```
+
+To tear down a minimal local stack with pgadmin:
+
+```bash
+docker compose -f docker-compose.yml -f docker-compose-pgadmin4.yml down --remove-orphans flood-app flood-service flood-db pgadmin
 ```
 
 ### Using Remote Database
@@ -60,6 +72,12 @@ Update FLOOD_SERVICE_CONNECTION_STRING in `docker-compose.yml` to point at the D
 
 ```bash
 docker compose up --build flood-app flood-service
+```
+
+To tear down a minimal local stack using a remote database:
+
+```bash
+docker compose down --remove-orphans flood-app flood-service
 ```
 
 ### Adding Redis Cache
@@ -76,12 +94,24 @@ To include Redis caching with the stack:
 docker compose -f docker-compose.yml -f docker-compose-redis-7.yml up --build flood-app flood-service flood-db flood-cache
 ```
 
+To tear down the stack with Redis caching:
+
+```bash
+docker compose -f docker-compose.yml -f docker-compose-redis-7.yml down --remove-orphans flood-app flood-service flood-db flood-cache
+```
+
 ### Adding Nginx Proxy
 
 To run the stack with an Nginx proxy in front:
 
 ```bash
 docker compose -f docker-compose.yml -f docker-compose-nginx.yml up --build flood-app flood-service flood-db flood-proxy
+```
+
+To tear down the stack with an Nginx proxy:
+
+```bash
+docker compose -f docker-compose.yml -f docker-compose-nginx.yml down --remove-orphans flood-app flood-service flood-db flood-proxy
 ```
 
 ### Full Production-like Stack
@@ -92,12 +122,24 @@ To run a complete production-like stack with all components:
 docker compose -f docker-compose.yml -f docker-compose-redis-7.yml -f docker-compose-nginx.yml up --build
 ```
 
+To tear down a complete production-like stack:
+
+```bash
+docker compose -f docker-compose.yml -f docker-compose-redis-7.yml -f docker-compose-nginx.yml down --remove-orphans
+```
+
 ## Debugging
 
 For debugging Node.js applications:
 
 ```bash
 docker compose -f docker-compose.yml -f docker-compose-debug.yml up --build
+```
+
+To tear down the debugging stack:
+
+```bash
+docker compose -f docker-compose.yml -f docker-compose-debug.yml down --remove-orphans
 ```
 
 Then connect to the debug port (9229) using Chrome DevTools or your IDE.
@@ -122,6 +164,12 @@ docker compose exec flood-service npm run test:no-coverage
 
 ```bash
 docker compose -f docker-compose.yml -f docker-compose-test.yml up --build flood-app flood-service
+```
+
+To tear down flood-app and flood-service test containers:
+
+```bash
+docker compose -f docker-compose.yml -f docker-compose-test.yml down --remove-orphans flood-app flood-service
 ```
 
 ### Running Service Tests - may not work
