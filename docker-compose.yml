@@ -2,8 +2,6 @@ services:
 
   flood-app:
     build:
-      args:
-        FLOOD_APP_GTM_ID: ${FLOOD_APP_GTM_ID}
       context: ../flood-app
       target: development
     image: flood-app 
