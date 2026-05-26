@@ -1,0 +1,5 @@
+services:
+  flood-app:
+    command: sh -c "npm run test:no-coverage"
+  flood-service:
+    command: sh -c "npm run test:no-coverage"

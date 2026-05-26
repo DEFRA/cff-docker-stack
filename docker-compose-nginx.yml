@@ -1,0 +1,21 @@
+services:
+
+  flood-proxy:
+    image: nginx:1.29.4-alpine
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ../flood-app/service-down:/usr/share/nginx/html
+    networks:
+      cff-internal:
+    ports:
+      - "3009:80"
+    depends_on:
+      - flood-app
+
+  flood-app:
+    ports: !override []
+    environment:
+      FLOOD_APP_SITE_URL: "http://flood-proxy"
+
+networks:
+  cff-internal:

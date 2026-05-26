@@ -1,0 +1,107 @@
+services:
+
+  flood-app:
+    build:
+      context: ../flood-app
+      target: development
+    image: flood-app 
+    depends_on:
+      - flood-service
+    restart: on-failure
+    environment:
+      NODE_ENV: dev
+      ENV: local
+      PORT: 3001
+      HOST: 0.0.0.0
+      FLOOD_APP_SERVICE_URL: "http://flood-service:3003"
+      FLOOD_APP_GEOSERVER_URL: "http://flood-gis:8080"
+    env_file:
+      - ../flood-app/.env
+    networks:
+      cff-internal:
+    volumes:
+      - /home/node/app/node_modules # Avoid overwriting node_modules
+      - /home/node/app/coverage # Exclude coverage reports from the host
+    ports:
+      - "3009:3001"
+    command: sh -c "npm run start:local"
+
+  flood-service:
+    build:
+      context: ../flood-service
+      target: development
+    image: flood-service
+    restart: on-failure
+    environment:
+      NODE_ENV: dev
+      ENV: local
+      PORT: 3003
+      HOST: 0.0.0.0
+      FLOOD_SERVICE_CONNECTION_STRING: "postgres://u_flood:secret@flood-db:5432/flooddev"
+    env_file:
+      - ../flood-service/.env
+    networks:
+      cff-internal:
+    volumes:
+      - /home/node/app/node_modules # Avoid overwriting node_modules
+      - /home/node/app/coverage # Exclude coverage reports from the host
+    ports:
+      - "3003:3003"
+    command: sh -c "npm run start:local"
+
+  flood-db:
+    build:
+      context: ../flood-db/database/flooddev/u_flood/setup
+      dockerfile: docker/Dockerfile
+    image: flood-db
+    shm_size: 1g
+    environment:
+      PGDATA: /pgdata
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+    volumes:
+      - pgdata:/pgdata
+      - wiyby:/wiyby
+    networks:
+      cff-internal:
+    ports:
+      - "5433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    command: postgres -c max_wal_size=8GB -c shared_preload_libraries=pg_cron -c cron.database_name=flooddev 
+
+  flood-gis:
+    image: docker.osgeo.org/geoserver:2.24.1
+    ports:
+      - "8080:8080"
+    networks:
+      cff-internal:
+    environment:
+      - INSTALL_EXTENSIONS=true
+      - STABLE_EXTENSIONS=wps,csw
+      - EXTRA_JAVA_OPTS=-Xms1G -Xmx2G
+      - SKIP_DEMO_DATA=true
+    volumes:
+      - ../flood-gis/geoserver/data/:/opt/geoserver_data/
+      - ./geoserver-settings.xml:/opt/geoserver_data/workspaces/flood/settings.xml
+      - ./geoserver-datastore.xml:/opt/geoserver_data/workspaces/flood/flooddev/datastore.xml
+
+    healthcheck:
+      test: curl --fail "http://flood-gis:8080/geoserver/web/wicket/resource/org.geoserver.web.GeoServerBasePage/img/logo.png" || exit 1
+      interval: 1m
+      retries: 3
+      timeout: 20s
+
+volumes: 
+  pgdata:
+    name: flood-db-pgdata
+    external: true
+  wiyby:
+    name: flood-db-wiyby
+    external: true
+
+networks:
+  cff-internal:
