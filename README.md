@@ -7,7 +7,6 @@ This repository contains Docker Compose configurations for running the Check for
 - `flood-app`: Frontend application
 - `flood-service`: Backend API service
 - `flood-db`: PostgreSQL database
-- `flood-gis`: GeoServer for spatial data
 - `flood-cache`: Redis cache server
 - `flood-proxy`: Nginx proxy server
 
@@ -39,8 +38,6 @@ docker volume create flood-db-wiyby
 ## Running the Stack
 
 ### Local Stack
-
-Note: flood-gis is not currently working so flood-app should be configured to point at the dev env geoserver through FLOOD_APP_GEOSERVER_URL env var in `docker-compose.yml`
 
 To run a minimal local stack:
 
